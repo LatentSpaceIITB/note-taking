@@ -121,21 +121,13 @@ export function Hero() {
               <div className="aspect-video flex items-center justify-center p-8 md:p-12">
                 {/* Recording UI Preview */}
                 <div className="text-center">
-                  {/* Animated Waveform */}
+                  {/* Static Waveform */}
                   <div className="flex items-center justify-center gap-1 mb-8">
-                    {[...Array(20)].map((_, i) => (
-                      <motion.div
+                    {[16, 24, 32, 40, 48, 56, 64, 56, 48, 40, 48, 56, 64, 56, 48, 40, 32, 24, 16, 12].map((h, i) => (
+                      <div
                         key={i}
                         className="w-1 bg-teal-500 rounded-full"
-                        animate={{
-                          height: [16, 32 + Math.random() * 32, 16],
-                        }}
-                        transition={{
-                          duration: 0.8,
-                          repeat: Infinity,
-                          repeatType: "reverse",
-                          delay: i * 0.05,
-                        }}
+                        style={{ height: `${h}px` }}
                       />
                     ))}
                   </div>
@@ -169,27 +161,16 @@ export function Hero() {
           <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-teal-500/20 blur-3xl rounded-full" />
         </motion.div>
 
-        {/* Trust Indicators */}
+        {/* Trust Indicator */}
         <motion.div
           className="mt-20 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.6 }}
         >
-          <p className="text-sm text-stone-400 mb-4">
-            Trusted by students at top universities
+          <p className="text-stone-400 font-medium">
+            Built by IITB students, for IITB students
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
-            {/* Placeholder logos - you would replace with actual logos */}
-            {["Stanford", "MIT", "Harvard", "Berkeley", "Yale"].map((name) => (
-              <span
-                key={name}
-                className="text-stone-400 font-semibold text-lg"
-              >
-                {name}
-              </span>
-            ))}
-          </div>
         </motion.div>
       </div>
 

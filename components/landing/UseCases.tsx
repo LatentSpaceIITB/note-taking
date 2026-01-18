@@ -75,17 +75,18 @@ const colorStyles = {
 
 export function UseCases() {
   return (
-    <section id="use-cases" className="relative py-24 md:py-32 bg-stone-900">
+    <section id="use-cases" className="relative py-16 md:py-24 bg-stone-900">
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <FadeInView className="text-center mb-16">
           <span className="inline-block px-4 py-1 rounded-full bg-rose-500/20 text-rose-400 text-sm font-medium mb-4">
             Use Cases
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-stone-400">Works with</span> <span className="text-teal-400">any audio</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 px-2">
+            <span className="text-stone-400">Works with</span>{" "}
+            <span className="text-teal-400">any audio</span>
           </h2>
-          <p className="text-lg text-stone-400 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-stone-400 max-w-2xl mx-auto px-4">
             Whether it's a lecture hall or a coffee shop meeting, we've got you covered.
           </p>
         </FadeInView>

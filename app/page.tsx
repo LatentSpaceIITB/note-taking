@@ -2,8 +2,8 @@ import { LandingNav } from '@/components/landing/LandingNav';
 import { Hero } from '@/components/landing/Hero';
 import { BentoGrid } from '@/components/landing/BentoGrid';
 import { UseCases } from '@/components/landing/UseCases';
-import { TrustParade } from '@/components/landing/TrustParade';
 import { ScrollTransform } from '@/components/landing/ScrollTransform';
+import { Team } from '@/components/landing/Team';
 import { Footer } from '@/components/landing/Footer';
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
       <BentoGrid />
       <UseCases />
       <ScrollTransform />
-      <TrustParade />
+      <Team />
       <Footer />
     </div>
   );

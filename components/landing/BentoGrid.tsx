@@ -13,7 +13,7 @@ import { OrbBackground } from "./GradientOrb";
 
 export function BentoGrid() {
   return (
-    <section id="features" className="relative py-24 md:py-32 overflow-hidden bg-stone-900">
+    <section id="features" className="relative py-16 md:py-24 overflow-hidden bg-stone-900">
       <OrbBackground variant="section" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
@@ -22,12 +22,12 @@ export function BentoGrid() {
           <span className="inline-block px-4 py-1 rounded-full bg-teal-500/20 text-teal-400 text-sm font-medium mb-4">
             Features
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 px-2">
             <span className="text-stone-400">Everything you need to</span>
             <br />
             <span className="text-teal-400">capture knowledge</span>
           </h2>
-          <p className="text-lg text-stone-400 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-stone-400 max-w-2xl mx-auto px-4">
             From recording to organized notes, we handle the heavy lifting so
             you can focus on learning.
           </p>

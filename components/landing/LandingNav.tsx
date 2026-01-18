@@ -43,6 +43,7 @@ export function LandingNav() {
     { href: "#features", label: "Features" },
     { href: "#use-cases", label: "Use Cases" },
     { href: "#how-it-works", label: "How It Works" },
+    { href: "#team", label: "Team" },
   ];
 
   return (
@@ -144,7 +145,7 @@ export function LandingNav() {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <motion.div
-            className="md:hidden mt-4 pt-4 border-t border-white/10"
+            className="md:hidden mt-4 pt-4 border-t border-white/10 bg-stone-900 rounded-b-2xl -mx-6 px-6 pb-4"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: EASING.smooth }}
