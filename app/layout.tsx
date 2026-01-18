@@ -26,6 +26,11 @@ export const metadata: Metadata = {
     description: "Stop scribbling. Start listening. The AI study partner that turns 90-minute lectures into perfectly structured notes.",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lecture Notes - AI-Powered Note Taking",
+    description: "Stop scribbling. Start listening. The AI study partner that turns 90-minute lectures into perfectly structured notes.",
+  },
 };
 
 export default function RootLayout({
