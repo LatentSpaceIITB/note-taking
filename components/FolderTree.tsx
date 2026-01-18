@@ -130,7 +130,7 @@ function FolderItem({
   onToggle: () => void;
   onRename: (name: string) => void;
   onDelete: () => void;
-  onMoveLecture: (lectureId: string, folderId: string) => void;
+  onMoveLecture: (lectureId: string, folderId: string | null) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(folder.name);
