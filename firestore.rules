@@ -1,0 +1,39 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can only access their own data
+    match /users/{userId} {
+      // Allow reading and writing profile
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Lectures subcollection
+      match /lectures/{lectureId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+
+        // Chunk transcriptions subcollection
+        match /chunkTranscriptions/{chunkId} {
+          allow read: if request.auth != null && request.auth.uid == userId;
+          // Cloud Functions write via Admin SDK (bypasses rules)
+          allow write: if request.auth != null && request.auth.uid == userId;
+        }
+      }
+
+      // Folders subcollection
+      match /folders/{folderId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Legacy lectures collection - keep for migration, read-only
+    match /lectures/{lectureId} {
+      allow read: if true;
+      allow write: if false;
+
+      match /chunkTranscriptions/{chunkId} {
+        allow read: if true;
+        allow write: if false;
+      }
+    }
+  }
+}
