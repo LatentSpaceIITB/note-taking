@@ -23,6 +23,30 @@ export class SyncManager {
   private userId: string | null = null;
   private callbacks: SyncCallbacks = {};
   private retryDelays = [1000, 2000, 4000, 8000, 16000]; // Exponential backoff
+  private isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+  private boundHandleOnline: () => void;
+  private boundHandleOffline: () => void;
+
+  constructor() {
+    this.boundHandleOnline = this.handleOnline.bind(this);
+    this.boundHandleOffline = this.handleOffline.bind(this);
+  }
+
+  private handleOnline(): void {
+    console.log('[SyncManager] Network online, resuming...');
+    this.isOnline = true;
+    if (this.sessionId && !this.running) {
+      this.running = true;
+      this.callbacks.onStatusChange?.('syncing');
+      this.syncLoop();
+    }
+  }
+
+  private handleOffline(): void {
+    console.log('[SyncManager] Network offline, pausing...');
+    this.isOnline = false;
+    this.callbacks.onStatusChange?.('paused');
+  }
 
   async start(sessionId: string, userId: string, callbacks: SyncCallbacks = {}): Promise<void> {
     if (this.running) {
@@ -35,6 +59,12 @@ export class SyncManager {
     this.callbacks = callbacks;
     this.running = true;
 
+    // Listen for network changes
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', this.boundHandleOnline);
+      window.addEventListener('offline', this.boundHandleOffline);
+    }
+
     this.callbacks.onStatusChange?.('syncing');
 
     await this.syncLoop();
@@ -45,6 +75,14 @@ export class SyncManager {
 
     while (this.running && this.sessionId) {
       try {
+        // Wait if offline
+        if (!this.isOnline) {
+          console.log('[SyncManager] Offline, waiting...');
+          this.callbacks.onStatusChange?.('paused');
+          await this.sleep(2000);
+          continue;
+        }
+
         // Get next unuploaded chunk
         const pending = await getUnuploadedChunks(this.sessionId);
         console.log('[SyncManager] Pending chunks:', pending.length);
@@ -56,7 +94,7 @@ export class SyncManager {
             // Recording ended and all chunks uploaded
             await updateSession(this.sessionId, { status: 'completed' });
             this.callbacks.onComplete?.(this.sessionId);
-            this.stop();
+            this.cleanup();
             return;
           }
 
@@ -64,6 +102,8 @@ export class SyncManager {
           await this.sleep(1000);
           continue;
         }
+
+        this.callbacks.onStatusChange?.('syncing');
 
         // Upload the first pending chunk
         const chunk = pending[0];
@@ -90,9 +130,10 @@ export class SyncManager {
       } catch (error) {
         console.error('Sync loop error:', error);
         this.callbacks.onStatusChange?.('error');
-        // Wait before retrying
-        await this.sleep(5000);
-        this.callbacks.onStatusChange?.('syncing');
+        // Wait longer before retrying after error
+        await this.sleep(10000);
+        // Check if still online
+        this.isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
       }
     }
   }
@@ -144,16 +185,34 @@ export class SyncManager {
     return url;
   }
 
+  private cleanup(): void {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('online', this.boundHandleOnline);
+      window.removeEventListener('offline', this.boundHandleOffline);
+    }
+  }
+
   stop(): void {
     this.running = false;
     this.sessionId = null;
     this.userId = null;
+    this.cleanup();
     this.callbacks.onStatusChange?.('idle');
   }
 
   pause(): void {
     this.running = false;
     this.callbacks.onStatusChange?.('paused');
+  }
+
+  resume(): void {
+    if (this.sessionId && !this.running) {
+      console.log('[SyncManager] Manual resume triggered');
+      this.isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+      this.running = true;
+      this.callbacks.onStatusChange?.('syncing');
+      this.syncLoop();
+    }
   }
 
   isRunning(): boolean {
